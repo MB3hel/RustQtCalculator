@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 
 # Environment variable modifications so the vcpkg installed QT will be found correctly
+# TODO: Currently, these modify path to locate NATIVE QT install
+#       Probably some work needed to support cross compilation, but unsure if qtbridge
+#       makes assumptions based on qmake path that would break cross compile
 export NO_VCPKG
 if [ "$NO_VCPKG" != "1" ]; then
     # Ensure vcpkg root is set
