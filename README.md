@@ -5,64 +5,39 @@ Experiments with using QT QML and rust
 
 ## Building
 
-Install Rust:
+1. Install Rust
+    ```sh
+    # Windows using https://scoop.sh
+    scoop install rustup
 
-```sh
-# Windows using https://scoop.sh
-# Note that you will need to install Visual Studio w/ Desktop Build Tools and Windows SDK too
-scoop install rustup
-rustup-init
+    # macOS w/ https://brew.sh
+    brew install rustup
 
+    # Ubuntu
+    sudo apt install rustup
 
-# macOS w/ https://brew.sh
-brew install rustup
-rustup-init
+    # Fedora
+    sudo dnf install rustup
 
+    # All OSes after installing rustup
+    # Make sure to install the OS's native toolchain as instructed
+    rustup-init
+    ```
 
-# Ubuntu
-sudo apt install rustup
-rustup-init
+2. Install other build dependencies
+    ```sh
+    # On windows, busybox is needed to run cargow script from cmd or powershell
+    # Alternatively can use msys2 bash or git bash
+    scoop install busybox-lean
+    ```
 
+2. Install required C++ libraries using `vcpkg`
+    ```sh
+    ./cargow install cargo-vcpkg
+    ./cargow vcpkg -v build
+    ```
 
-# Fedora
-sudo dnf install rustup
-rustup-init
-```
-
-
-
-Install QT using vcpkg & set path
-
-```sh
-cargo install cargo-vcpkg
-cargo vcpkg -v build
-```
-
-Set PATH to include QT direcotry (qtbindings crate doesn't support a way to do this automaticaly
-via build.rs at this time)
-
-```sh
-# Host triplet will be x64-windows, x64-linux, or arm64-osx in most cases
-# Other platforms are not well supported by QT anymore
-
-# Powershell syntax
-$Env:PATH="$VCPKG_ROOT/installed/<host_triplet>/tools/Qt6/bin;$Env:PATH"
-
-# Bash syntax
-export PATH="$VCPKG_ROOT/installed/<host_triplet>/tools/Qt6/bin:$PATH"
-
-# Test by checking for qmake executable
-
-# Powershell
-where.exe qmake
-
-# Bash
-which qmake
-```
-
-Build
-
-```sh
-cargo build
-```
-
+3. Build
+    ```sh
+    ./cargow build
+    ```

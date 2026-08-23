@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+
+# Environment variable modifications so the vcpkg installed QT will be found correctly
+export NO_VCPKG
+if [ "$NO_VCPKG" != "1" ]; then
+    # Ensure vcpkg root is set
+    VCPKG_ROOT="${VARIABLE:=$HOME/vcpkg}"
+    if [ "$(uname -o)" = "Msys" ]; then
+        VCPKG_ROOT="$(cygpath -u "$VCPKG_ROOT")"
+    fi
+
+    # Detect OS architecture to select correct vcpkg triplet
+    ARCH="unknown"
+    case "$(uname -m)" in
+        x86_64)
+            ARCH="x64"
+            ;;
+        i686|i586|i486|i386)
+            ARCH="x86"
+            ;;
+        arm64|aarch64)
+            ARCH="arm64"
+            ;;
+    esac
+
+    # Detect OS name to select correct vcpkg triplet
+    OS="unknown"
+    case "$(uname -o)" in
+        Msys|"MS/Windows")
+            OS="windows"
+            ;;
+        Darwin)
+            OS="osx"
+            ;;
+        "GNU/Linux")
+            OS="linux"
+            ;;
+    esac
+
+    # Prepend QT tools path to PATH before invoking cargo
+    # This is the only way to get qtbridge crate to find QT properly
+    # since build.rs cannot modify the env var in a way that impacts other crates
+    export PATH="$VCPKG_ROOT/installed/$ARCH-$OS/tools/Qt6/bin/:$PATH"
+fi
+
+
+# Invoke cargo passing through args
+cargo "$@"
+
