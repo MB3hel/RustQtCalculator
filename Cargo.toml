@@ -1,0 +1,25 @@
+[package]
+name = "RustQtCalculator"
+version = "0.1.0"
+edition = "2024"
+
+
+[dependencies]
+qtbridge = "0.2.0"
+
+
+[build-dependencies]
+vcpkg = "0.2"
+
+
+[package.metadata.vcpkg]
+git = "https://github.com/microsoft/vcpkg"
+rev = "master"
+dependencies = []
+
+
+[package.metadata.vcpkg.target]
+x86_64-apple-darwin = { dependencies = ["qtbase"]}
+x86_64-unknown-linux-gnu = { dependencies = ["qtbase[gtk3]", "qtwayland"]}
+x86_64-pc-windows-msvc = { dependencies = ["qtbase"]}
+
