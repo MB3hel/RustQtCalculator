@@ -1,6 +1,6 @@
 # RustQtCalcualtor
 
-TODO: Description
+Experiments with using QT QML and rust
 
 
 ## Building
