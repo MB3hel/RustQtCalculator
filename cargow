@@ -4,7 +4,7 @@
 export NO_VCPKG
 if [ "$NO_VCPKG" != "1" ]; then
     # Ensure vcpkg root is set
-    VCPKG_ROOT="${VARIABLE:=$HOME/vcpkg}"
+    VCPKG_ROOT="${VCPKG_ROOT:=$HOME/vcpkg}"
     if [ "$(uname -o)" = "Msys" ]; then
         VCPKG_ROOT="$(cygpath -u "$VCPKG_ROOT")"
     fi
@@ -41,6 +41,9 @@ if [ "$NO_VCPKG" != "1" ]; then
     # This is the only way to get qtbridge crate to find QT properly
     # since build.rs cannot modify the env var in a way that impacts other crates
     export PATH="$VCPKG_ROOT/installed/$ARCH-$OS/tools/Qt6/bin/:$PATH"
+
+    # QT doesn't support static linkage well
+    export VCPKGRS_DYNAMIC=1
 fi
 
 
