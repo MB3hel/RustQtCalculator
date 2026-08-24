@@ -33,6 +33,11 @@ Experiments with using QT QML and rust
 
 2. Install required C++ libraries using `vcpkg`
     ```sh
+    # NOTE: On Linux systems, various system libraries will be required by the vcpkg build
+    #       in addition to the core toolchain rust requires.
+    #       If something fails, check the output and/or error logs for that package
+    #       You will minimally need kernel headers, perl and various modules, and a few X11 libs
+    #       There are likely others. This is not a complete list.
     ./cargow install cargo-vcpkg
     ./cargow vcpkg -v build
     ```
