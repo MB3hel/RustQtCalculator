@@ -38,11 +38,11 @@ triplet="arm64-windows"
 # arm64 macOS
 [package.metadata.vcpkg.target.arm64-apple-darwin]
 dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-triplet = "arm64-osx"
+triplet = "arm64-osx-dynamic"
 
 
 # x64 Linux
 [package.metadata.vcpkg.target.x86_64-unknown-linux-gnu]
 dependencies = ["qtbase[gtk3]", "qtdeclarative", "qttools", "qtsvg", "qtwayland"]
-triplet = "x64-linux"
+triplet = "x64-linux-dynamic"
 
