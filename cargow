@@ -1,18 +1,9 @@
 #!/usr/bin/env sh
 
-# Environment variable modifications so the vcpkg installed QT will be found correctly
-# TODO: Currently, these modify path to locate NATIVE QT install
-#       Probably some work needed to support cross compilation, but unsure if qtbridge
-#       makes assumptions based on qmake path that would break cross compile
-export NO_VCPKG
-if [ "$NO_VCPKG" != "1" ]; then
-    # Ensure vcpkg root is set
-    VCPKG_ROOT="${VCPKG_ROOT:=$HOME/vcpkg}"
-    if [ "$(uname -o)" = "Msys" ]; then
-        VCPKG_ROOT="$(cygpath -u "$VCPKG_ROOT")"
-    fi
 
-    # Detect OS architecture to select correct vcpkg triplet
+## Get vcpkg triplet for the current build host
+#  Uses dynmaic linked triplets b/c QT does not support static linking well
+vcpkg_host_triplet() {
     ARCH="unknown"
     case "$(uname -m)" in
         x86_64)
@@ -25,8 +16,6 @@ if [ "$NO_VCPKG" != "1" ]; then
             ARCH="arm64"
             ;;
     esac
-
-    # Detect OS name to select correct vcpkg triplet
     OS="unknown"
     case "$(uname -o)" in
         Msys|"MS/Windows")
@@ -39,16 +28,63 @@ if [ "$NO_VCPKG" != "1" ]; then
             OS="linux-dynamic"
             ;;
     esac
+    echo "$ARCH-$OS"
+}
+
+
+## Parse cargo command line arguments to extract target and map to vcpkg triplet
+vcpkg_target_triplet(){
+    while [ $# -gt 0 ]; do
+    case "$1" in
+        --target)
+            case "$2" in
+                "x86_64-pc-windows-msvc")
+                    echo "x64-windows"
+                    ;;
+                "arm64-pc-windows-msvc")
+                    echo "arm64-windows"
+                    ;;
+                "arm64-apple-darwin")
+                    echo "arm64-osx-dynamic"
+                    ;;
+                "arm64-unknown-linux-gnu")
+                    echo "x64-linux-dynamic"
+                    ;;
+                *)
+                    echo "unknown"
+                    ;;
+            esac
+            return 0
+            ;;
+        *)
+            shift
+            ;;
+    esac
+    done
+    # If no target specified, assume compiling for host
+    vcpkg_host_triplet
+}
+
+
+# Setup everything correctly for vcpkg
+export NO_VCPKG
+if [ "$NO_VCPKG" != "1" ]; then
+    # Ensure vcpkg root is set
+    VCPKG_ROOT="${VCPKG_ROOT:=$HOME/vcpkg}"
+    if [ "$(uname -o)" = "Msys" ]; then
+        VCPKG_ROOT="$(cygpath -u "$VCPKG_ROOT")"
+    fi
+
+    # Set vcpkg triplets properly
+    export VCPKG_DEFAULT_HOST_TRIPLET="$(vcpkg_host_triplet)"
+    export VCPKG_DEFAULT_TRIPLET="$(vcpkg_target_triplet "$@")"
+    export VCPKGRS_DYNAMIC=1
+    export VCPKGRS_TRIPLET="$VCPKG_DEFAULT_TRIPLET"
 
     # Prepend QT tools path to PATH before invoking cargo
     # This is the only way to get qtbridge crate to find QT properly
     # since build.rs cannot modify the env var in a way that impacts other crates
-    export PATH="$VCPKG_ROOT/installed/$ARCH-$OS/tools/Qt6/bin/:$PATH"
-
-    # QT doesn't support static linkage well
-    export VCPKG_DEFAULT_HOST_TRIPLET=$ARCH-$OS
-    export VCPKGRS_DYNAMIC=1
-    export VCPKGRS_TRIPLET=$ARCH-$OS        # TODO: This won't work for cross compile
+    export PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/:$PATH"
 fi
 
 
