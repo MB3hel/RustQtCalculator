@@ -98,6 +98,8 @@ if [ "$NO_VCPKG" != "1" ]; then
             export LD_LIBRARY_PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/lib/:$LD_LIBRARY_PATH"
             ;;
     esac
+    export QT_PLUGIN_PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/Qt6/plugins"
+    export QML_IMPORT_PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/Qt6/qml"
 fi
 
 
