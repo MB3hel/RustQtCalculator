@@ -85,6 +85,19 @@ if [ "$NO_VCPKG" != "1" ]; then
     # This is the only way to get qtbridge crate to find QT properly
     # since build.rs cannot modify the env var in a way that impacts other crates
     export PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/:$PATH"
+
+    # Setup so cargow run will be able to run app finding correct dynamic libs from vcpkg
+    case "$(uname -o)" in
+        Msys|"MS/Windows")
+            export PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/lib/:$PATH"
+            ;;
+        Darwin)
+            export DYLD_LIBRARY_PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/lib:$DYLD_LIBRARY_PATH"
+            ;;
+        "GNU/Linux")
+            export LD_LIBRARY_PATH="$VCPKG_ROOT/installed/$VCPKG_DEFAULT_HOST_TRIPLET/lib/:$LD_LIBRARY_PATH"
+            ;;
+    esac
 fi
 
 
