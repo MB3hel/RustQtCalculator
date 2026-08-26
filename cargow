@@ -33,10 +33,10 @@ if [ "$NO_VCPKG" != "1" ]; then
             OS="windows"
             ;;
         Darwin)
-            OS="osx"
+            OS="osx-dynamic"
             ;;
         "GNU/Linux")
-            OS="linux"
+            OS="linux-dynamic"
             ;;
     esac
 
@@ -46,6 +46,7 @@ if [ "$NO_VCPKG" != "1" ]; then
     export PATH="$VCPKG_ROOT/installed/$ARCH-$OS/tools/Qt6/bin/:$PATH"
 
     # QT doesn't support static linkage well
+    export VCPKG_DEFAULT_HOST_TRIPLET=$ARCH-$OS
     export VCPKGRS_DYNAMIC=1
 fi
 
