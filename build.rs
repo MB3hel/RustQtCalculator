@@ -17,7 +17,7 @@ fn get_vcpkg_deps_list() -> Vec<String>{
         .and_then(|dependencies| dependencies.as_array())
         .expect("Failed to load dependencies from Cargo.toml");
     return deparray.iter()
-        .filter_map(|v| v.as_str().map(|s| s.to_string()))
+        .filter_map(|v| v.as_str().map(|s| s.split('[').next().unwrap_or(s).to_string()))
         .collect();
 }
 

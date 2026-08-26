@@ -26,23 +26,19 @@ rev = "master"
 # x64 Windows
 [package.metadata.vcpkg.target.x86_64-pc-windows-msvc]
 dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-triplet="x64-windows"
 
 
 # arm64 Windows
 [package.metadata.vcpkg.target.arm64-pc-windows-msvc]
 dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-triplet="arm64-windows"
 
 
 # arm64 macOS
 [package.metadata.vcpkg.target.arm64-apple-darwin]
 dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-triplet = "arm64-osx-dynamic"
 
 
 # x64 Linux
 [package.metadata.vcpkg.target.x86_64-unknown-linux-gnu]
 dependencies = ["qtbase[gtk3]", "qtdeclarative", "qttools", "qtsvg", "qtwayland"]
-triplet = "x64-linux-dynamic"
 

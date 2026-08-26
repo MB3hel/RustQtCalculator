@@ -48,6 +48,7 @@ if [ "$NO_VCPKG" != "1" ]; then
     # QT doesn't support static linkage well
     export VCPKG_DEFAULT_HOST_TRIPLET=$ARCH-$OS
     export VCPKGRS_DYNAMIC=1
+    export VCPKGRS_TRIPLET=$ARCH-$OS        # TODO: This won't work for cross compile
 fi
 
 
