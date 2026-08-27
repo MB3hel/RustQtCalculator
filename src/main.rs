@@ -1,8 +1,13 @@
 
 use qtbridge::{QApp};
 
+
+// QRC Resoruces
+#[path = "../res/mod.rs"]
+mod res;
+
+// App backend
 mod backend;        // App logic
-mod res;            // QRC resources
 
 fn main() {
     res::init();
