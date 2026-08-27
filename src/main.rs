@@ -1,7 +1,8 @@
 // Copyright (C) 2025 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only
 
-use qtbridge::{QApp, qobject};
+
+use qtbridge::{QApp, include_bytes_qml, qobject};
 
 #[qobject(Base = QListModel)]
 mod backend {
@@ -50,8 +51,15 @@ mod backend {
 }
 
 fn main() {
+    include_bytes_qml!("qml/Main.qml");
+    include_bytes_qml!("qtquickcontrols2.conf");
+    include_bytes_qml!("+windows/qtquickcontrols2.conf");
+    include_bytes_qml!("+macos/qtquickcontrols2.conf");
+
     QApp::new()
         .register::<backend::Backend>()
-        .load_qml(include_bytes!("Main.qml"))
+        .add_import_path("qrc:/qml")
+        .load_qml_from_file("qrc:/qml/Main.qml")
         .run();
 }
+
