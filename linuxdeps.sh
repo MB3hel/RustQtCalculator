@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 case "$(uname -o)" in
     GNU/Linux)
