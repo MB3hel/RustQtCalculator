@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only
 
 
-use qtbridge::{QApp, include_bytes_qml, qobject};
+use qtbridge::{QApp, qobject};
 
 #[qobject(Base = QListModel)]
 mod backend {
@@ -50,11 +50,10 @@ mod backend {
     }
 }
 
+mod res;
+
 fn main() {
-    include_bytes_qml!("qml/Main.qml");
-    include_bytes_qml!("qtquickcontrols2.conf");
-    include_bytes_qml!("+windows/qtquickcontrols2.conf");
-    include_bytes_qml!("+macos/qtquickcontrols2.conf");
+    res::init();
 
     QApp::new()
         .register::<backend::Backend>()
