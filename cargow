@@ -104,5 +104,5 @@ fi
 
 
 # Invoke cargo passing through args
-cargo "$@"
+exec cargo "$@"
 
