@@ -18,7 +18,9 @@ case "$DISTRO" in
             sudo apt install build-essential git curl zip unzip tar \
                 pkg-config libgl1-mesa-dev libglu1-mesa-dev '^libxcb.*-dev' \
                 libx11-xcb-dev libxrender-dev libxi-dev libxkbcommon-dev \
-                libxkbcommon-x11-dev
+                libxkbcommon-x11-dev autoconf autoconf-archive automake libtool \
+                python3 python3-venv bison libxtst-dev libxrandr-dev flex \
+                libwayland-dev libsm-dev libice-dev libx11-dev
         )
         ;;
     fedora|rhel|almalinux|rocky)
@@ -30,7 +32,7 @@ case "$DISTRO" in
                 xcb-util-keysyms-devel xcb-util-renderutil-devel \
                 xcb-util-wm-devel libX11-xcb libXrender-devel libXi-devel \
                 libxkbcommon-devel libxkbcommon-x11-devel gcc-c++ \
-                autoconf autoconf-archive automake libtoolize cmake \
+                autoconf autoconf-archive automake libtool cmake \
                 ninja-build perl-open libXi-devel libXtst-devel \
                 libXrandr-devel perl-IPC-Cmd kernel-devel perl-Time-Piece \
                 wayland-devel libSM-devel libICE-devel
