@@ -35,7 +35,8 @@ case "$DISTRO" in
                 autoconf autoconf-archive automake libtool cmake \
                 ninja-build perl-open libXi-devel libXtst-devel \
                 libXrandr-devel perl-IPC-Cmd kernel-devel perl-Time-Piece \
-                wayland-devel libSM-devel libICE-devel
+                wayland-devel libSM-devel libICE-devel 'xcb-util-*-devel' \
+                libxcb-devel libxkbcommon-x11-devel xcb-util-cursor-devel
         )
         ;;
 esac
