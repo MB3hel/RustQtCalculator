@@ -32,7 +32,8 @@ case "$DISTRO" in
                 libxkbcommon-devel libxkbcommon-x11-devel gcc-c++ \
                 autoconf autoconf-archive automake libtoolize cmake \
                 ninja-build perl-open libXi-devel libXtst-devel \
-                libXrandr-devel perl-IPC-Cmd kernel-devel perl-Time-Piece
+                libXrandr-devel perl-IPC-Cmd kernel-devel perl-Time-Piece \
+                wayland-devel libSM-devel libICE-devel
         )
         ;;
 esac
