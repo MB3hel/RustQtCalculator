@@ -3,11 +3,11 @@
 
 # Get path of activate.sh
 if [ -n "$BASH_SOURCE" ]; then
-    _PROJ_DIR="$(dirname "${BASH_SOURCE[0]}")"
+    _PROJ_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 elif [ -n "$ZSH_VERSION" ]; then
-    _PROJ_DIR="$(dirname "${(%):-%x}")"
+    _PROJ_DIR="$(dirname "$(realpath "${(%):-%x}")")"
 else
-    _PROJ_DIR="$(dirname "$0")"
+    _PROJ_DIR="$(dirname "$(realpath "$0")")"
 fi
 
 
