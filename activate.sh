@@ -1,49 +1,19 @@
-# NOTE: Maintain posix sh compatability in this script b/c windows
-# builds may use it via busybox ash
-
-usage(){
-    echo "Usage: . activate.sh [--target cargo_triplet] [-h|--help]"
-    return 1
-}
+# bash and zsh compatible
 
 
-# Parse arguments
-while [ $# -gt 0 ]; do
-    case "$1" in
-        --target)
-            export CARGO_BUILD_TARGET="$2"
-            shift
-            shift
-            ;;
-        -h|--help)
-            usage
-            ;;
-        *)
-            echo "ERROR: Unknown argument '$1'" >&2
-            usage
-            ;;
-    esac
-done
-set --
-
-
-# Check that activate.sh is being sourced from the same folder
-# No reliable way to get path of sourced script in posix sh
-# so have to enforce cwd being known
-if [ -f .activate_check ] && [ "$(sha256sum .activate_check | cut -d' ' -f1)" = "d82990edb2f5c044fbd1348b93c6584102c9af0bf44eaa6a8ad9b1c97a95f14b" ]; then
-    true
+# Get path of activate.sh
+if [ -n "$BASH_SOURCE" ]; then
+    _PROJ_DIR="$(dirname "${BASH_SOURCE[0]}")"
+elif [ -n "$ZSH_VERSION" ]; then
+    _PROJ_DIR="$(dirname "${(%):-%x}")"
 else
-    echo "ERROR: You must cd into the same directory as activate.sh first!" >&2
-    return 1
+    _PROJ_DIR="$(dirname "$0")"
 fi
 
 
-# Make sure vcpkg is installed and VCPKG_ROOT is set (or vcpkg is in PATH)
+# Make sure VCPKG_ROOT is set
 if [ -z "$VCPKG_ROOT" ]; then
-    type vcpkg > /dev/null 2>&1 && VCPKG_ROOT="$(dirname "$(realpath "$(which vcpkg)")")"
-fi
-if [ -z "$VCPKG_ROOT" ]; then
-    echo "ERROR: Could not find vcpkg. Make sure VCPKG_ROOT is set." >&2
+    echo "ERROR: VCPKG_ROOT is not set" >&2
     return 1
 fi
 if [ "$(uname -o)" = "Msys" ]; then
@@ -91,9 +61,8 @@ esac
 export VCPKG_DEFAULT_HOST_TRIPLET="$ARCH-$OS"
 
 
-# Determine vcpkg target triplet based on provided cargo target triplet
-# If no cargo target triplet given via command line, assume building
-# for host system
+# Determine vcpkg target triplet based on cargo target triplet
+# If no cargo target triplet given, assume building for host system
 if [ -z "$CARGO_BUILD_TARGET" ]; then
     export VCPKG_DEFAULT_TRIPLET="$VCPKG_DEFAULT_HOST_TRIPLET"
 else
@@ -118,16 +87,9 @@ else
 fi
 export VCPKGRS_DYNAMIC=1
 
-# Note: vcpkg will not read this varaible when invoked. This is just set for build.rs
-export VCPKG_INSTALLED_ROOT="$PWD/vcpkg_installed"
 
-
-# Need to make sure that, once installed, vcpkg's qt qmake for host is in path before
-# any other qmake (such as distro provided package). So append the directory that it will
-# exist under after vcpkg install to the PATH now
-# This **must** be done before cargo is invoked. Cannot do it in build.rs as env vars from build.rs
-# will not impact building of other crates such as qtbridge (which uses qmake to identify qt install)
-export PATH="$VCPKG_INSTALLED_ROOT/$VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/:$PATH"
+# Prepend vcpkg installed qmake to the path so it is found first
+export PATH="$_PROJ_DIR/vcpkg_installed/$VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/:$PATH"
 
 
 # Helper function to install build dependencies before vcpkg install on liunx distros
@@ -154,6 +116,7 @@ install-builddeps(){
                     python3 python3-venv bison libxtst-dev libxrandr-dev flex \
                     libwayland-dev libsm-dev libice-dev libx11-dev
             )
+            return $?
             ;;
         fedora|rhel|almalinux|rocky)
             (
@@ -170,6 +133,8 @@ install-builddeps(){
                     wayland-devel libSM-devel libICE-devel 'xcb-util-*-devel' \
                     libxcb-devel libxkbcommon-x11-devel xcb-util-cursor-devel
             )
+            return $?
             ;;
     esac
 }
+

@@ -33,8 +33,8 @@ fn find_vcpkg_libs(){
     // QEMU userspace emulation) running cross compiled binaries may be possible. So this should
     // configure everything correctly for that scenario too. If not cross compiling then
     // VCPKG_DEFAULT_TRIPLET will match VCPKG_DEFAULT_HOST_TRIPLET anyway
-    let vcpkg_install = env::var("VCPKG_INSTALLED_ROOT").expect("VCPKG_INSTALLED_ROOT is not set");
-    let vcpkg_lib_path = PathBuf::from(&vcpkg_install).join(&vcpkg_triplet).join("lib");
+    let proj_dir = env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR  is not set");
+    let vcpkg_lib_path = PathBuf::from(&proj_dir).join("vcpkg_installed").join(&vcpkg_triplet).join("lib");
 
     // Prepend vcpkg QT library folder to correct env var for the OS
     let orig_str = env::var(lib_var).unwrap_or_else(|_| "".to_string());
@@ -44,9 +44,9 @@ fn find_vcpkg_libs(){
     println!("cargo:rustc-env={0}={1}", lib_var, new_str.to_string_lossy());
 
     // Set vars for QT to know where its plugins are (maybe only striclty necessary on Windows?)
-    let plugin_path = PathBuf::from(&vcpkg_install).join(&vcpkg_triplet).join("Qt6").join("plugins");
+    let plugin_path = PathBuf::from(&proj_dir).join("vcpkg_installed").join(&vcpkg_triplet).join("Qt6").join("plugins");
     println!("cargo:rustc-env=QT_PLUGIN_PATH={}", plugin_path.to_string_lossy());
-    let qml_path = PathBuf::from(&vcpkg_install).join(&vcpkg_triplet).join("Qt6").join("qml");
+    let qml_path = PathBuf::from(&proj_dir).join("vcpkg_installed").join(&vcpkg_triplet).join("Qt6").join("qml");
     println!("cargo:rustc-env=QML_IMPORT_PATH={}", qml_path.to_string_lossy());
 }
 
