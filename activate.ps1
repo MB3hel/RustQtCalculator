@@ -1,5 +1,8 @@
 # Powershell port of activate.sh (only tested on windows with powershell 7.x)
 
+# path seperator (: or ;) for this OS
+$psep = [IO.Path]::PathSeparator
+
 
 # Get path of activate.ps1
 # No special steps here for powershell. Already in $PSScriptRoot
@@ -10,7 +13,7 @@ if (-not $Env:VCPKG_ROOT) {
     Write-Error "ERROR: VCPKG_ROOT is not set"
     return 1
 }
-$Env:PATH="$Env:VCPKG_ROOT;$Env:PATH"
+$Env:PATH="$Env:VCPKG_ROOT$psep$Env:PATH"
 
 
 # Determine vcpkg host triplet
@@ -69,5 +72,5 @@ $Env:VCPKGRS_DYNAMIC=1
 
 
 # Prepend vcpkg installed qmake to the path so it is found first
-$Env:PATH = "$PSScriptRoot/vcpkg_installed/$Env:VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/;$Env:PATH"
+$Env:PATH = "$PSScriptRoot/vcpkg_installed/$Env:VCPKG_DEFAULT_HOST_TRIPLET/tools/Qt6/bin/$psep$Env:PATH"
 
