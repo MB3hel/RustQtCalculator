@@ -30,7 +30,7 @@ set --
 # Check that activate.sh is being sourced from the same folder
 # No reliable way to get path of sourced script in posix sh
 # so have to enforce cwd being known
-if [ -f .activate_check ] && [ "$(sha256sum .activate_check)" = "d82990edb2f5c044fbd1348b93c6584102c9af0bf44eaa6a8ad9b1c97a95f14b  .activate_check" ]; then
+if [ -f .activate_check ] && [ "$(sha256sum .activate_check | cut -d' ' -f1)" = "d82990edb2f5c044fbd1348b93c6584102c9af0bf44eaa6a8ad9b1c97a95f14b" ]; then
     true
 else
     echo "ERROR: You must cd into the same directory as activate.sh first!" >&2

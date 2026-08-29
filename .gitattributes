@@ -1,0 +1,4 @@
+# Do not change line endings in .activate-check as it's hash is used for validation
+# It is text, but just random data in hex format. Only its hash is ever used
+/.activate_check -text
+/.activate_check binary
