@@ -9,9 +9,14 @@ Experiments with using QT QML and rust
 
 2. [Install vcpkg](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-powershell). Make sure the `VCPKG_ROOT` environment variable is set. Only the first two steps on the linked page are required (clone and env vars)
 
-3. Setup environment vars for build. NOTE: On windows, using MSYS2 bash or zsh is REQUIRED. Busybox sh will not work (fails to translate internal sh -c commands or paths like msys2's posix emulation layer does)
-    ```sh
+3. Setup environment vars for build.
+```sh
     # Optionally set CARGO_BUILD_TARGET env var first if you intend to cross compile
+    
+    # Windows (powershell not cmd)
+    . .\activate.ps1
+
+    # Everything else (including MSYS2 bash/zsh on windows)
     . ./activate
     ```
 
