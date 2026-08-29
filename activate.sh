@@ -46,6 +46,10 @@ if [ -z "$VCPKG_ROOT" ]; then
     echo "ERROR: Could not find vcpkg. Make sure VCPKG_ROOT is set." >&2
     return 1
 fi
+if [ "$(uname -o)" = "Msys" ]; then
+    # On windows under msys2, windows style paths here break things
+    VCPKG_ROOT="$(cygpath -u "$VCPKG_ROOT")"
+fi
 export VCPKG_ROOT
 export PATH="$VCPKG_ROOT:$PATH"
 
@@ -112,7 +116,7 @@ else
             ;; 
     esac
 fi
-
+export VCPKGRS_DYNAMIC=1
 
 # Note: vcpkg will not read this varaible when invoked. This is just set for build.rs
 export VCPKG_INSTALLED_ROOT="$PWD/vcpkg_installed"
