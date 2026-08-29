@@ -17,6 +17,7 @@ Experiments with using QT QML and rust
     . .\activate.ps1
 
     # Everything else (including MSYS2 bash/zsh on windows)
+    # Note: cargo build will probably not work in busybox on windows, if using this on windows must be MSYS2
     . ./activate
     ```
 
