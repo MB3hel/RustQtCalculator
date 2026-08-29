@@ -137,7 +137,7 @@ install-builddeps(){
             ;;
         *)
             echo "No build deps on this OS"
-            exit 1
+            return 1
             ;;
     esac
 
