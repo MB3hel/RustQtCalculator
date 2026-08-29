@@ -1,0 +1,26 @@
+{
+  "dependencies": [
+    {
+      "name": "qtbase",
+      "platform": "linux",
+      "features": ["gtk3"]
+    },
+    {
+      "name": "qtbase",
+      "platform": "!linux"
+    },
+    {
+      "name": "qtwayland",
+      "platform": "linux"
+    },
+    {
+        "name": "qtdeclarative"
+    },
+    {
+        "name": "qttools"
+    },
+    {
+        "name": "qtsvg"
+    }
+  ]
+}

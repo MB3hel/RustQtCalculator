@@ -10,35 +10,4 @@ qtbridge = "0.2.0"
 
 [build-dependencies]
 vcpkg = "0.2"
-toml = "0.8"
-
-
-
-########################################################################################################################
-# vcpkg for c/c++ dependencies
-########################################################################################################################
-
-[package.metadata.vcpkg]
-git = "https://github.com/microsoft/vcpkg"
-rev = "master"
-
-
-# x64 Windows
-[package.metadata.vcpkg.target.x86_64-pc-windows-msvc]
-dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-
-
-# arm64 Windows
-[package.metadata.vcpkg.target.arm64-pc-windows-msvc]
-dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-
-
-# arm64 macOS
-[package.metadata.vcpkg.target.arm64-apple-darwin]
-dependencies = ["qtbase", "qtdeclarative", "qttools", "qtsvg"]
-
-
-# x64 Linux
-[package.metadata.vcpkg.target.x86_64-unknown-linux-gnu]
-dependencies = ["qtbase[gtk3]", "qtdeclarative", "qttools", "qtsvg", "qtwayland"]
 

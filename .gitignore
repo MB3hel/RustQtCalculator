@@ -1,3 +1,4 @@
 /target
 .lvimrc
 Cargo.lock
+/vcpkg_installed
